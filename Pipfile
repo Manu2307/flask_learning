@@ -1,0 +1,34 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+psycopg2 = "*"
+flask = "*"
+cerberus = "*"
+flask-mail = "*"
+flask-migrate = "*"
+flask-sqlalchemy = "*"
+sqlalchemy-utils = "*"
+python-dotenv = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+flasgger = "*"
+pytz = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
+flask-cors = "*"
+flask-httpauth = "*"
+factory-boy = "*"
+flask-caching = "*"
+redis = "*"
+celery = "*"
+requests = "*"
+passlib = "*"
+pyjwt = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
