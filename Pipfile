@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-psycopg2 = "*"
 flask = "*"
 cerberus = "*"
 flask-mail = "*"
@@ -31,4 +30,4 @@ pyjwt = "*"
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.9"
