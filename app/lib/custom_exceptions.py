@@ -10,7 +10,6 @@ class CreateRecordFailed(Exception):
         super().__init__(msg, *args, **kwargs)
 
 
-
 class CreateRecordFailure(Exception):
     pass
 

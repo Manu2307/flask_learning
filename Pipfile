@@ -18,7 +18,6 @@ pytz = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
 flask-cors = "*"
-flask-httpauth = "*"
 factory-boy = "*"
 flask-caching = "*"
 redis = "*"
@@ -26,6 +25,9 @@ celery = "*"
 requests = "*"
 passlib = "*"
 pyjwt = "*"
+flask-httpauth = "*"
+flask-dantic = "*"
+pydantic ="1.10.13"
 
 [dev-packages]
 

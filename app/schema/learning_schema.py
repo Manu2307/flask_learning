@@ -1,3 +1,35 @@
+# from pydantic import Field
+from typing import Optional
+from datetime import datetime
+from app.schema.base_schema import BaseSchema
+from pydantic import UUID4
+
+
+class CreateLearningRequest(BaseSchema):
+    associate_id: str
+    email: str
+    skill_name: str
+    duration: int
+    learning_resource: str
+    resource_link: str
+    start_datetime: datetime
+    end_datetime: datetime
+    status: str
+
+
+class CreateLearningResponse(BaseSchema):
+    id: Optional[UUID4]
+    associate_id: UUID4
+    email: str
+    skill_name: str
+    duration: int
+    learning_resource: str
+    resource_link: str
+    start_datetime: datetime
+    end_datetime: datetime
+    status: str
+
+
 CREATE_lEARNING_SCHEMA = {
     'associate_id' : {
         'type': 'string',
@@ -39,13 +71,7 @@ CREATE_lEARNING_SCHEMA = {
         'type': 'float',
         'required': True,
         'min': 0.0,
-        'max': 10.0,
-        'meta': {
-            'custom_message': {
-                'minlength': 'duration id cannot be less than 0',
-                'maxlength': 'duration cannot be more than 10.0'
-            }
-        }
+        'max': 10.0
     }
 }
 

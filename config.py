@@ -28,6 +28,17 @@ class BaseConfig:
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'
 
+    MAIL_SERVER = os.environ.get('MAIL_SERVER')
+    MAIL_PORT = os.environ.get('MAIL_PORT')
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')
+    MAIL_USE_SSL = True if os.environ.get('MAIL_USE_SSL') == 'True' else False
+    MAIL_USE_TLS = True if os.environ.get('MAIL_USE_TLS') == 'True' else False
+
+    CLIENT_ID = os.environ.get('AUTH_CLIENT_ID')
+    CLIENT_SECRET = os.environ.get('AUTH_CLIENT_SECRET')
+
 
 class DevConfig(BaseConfig):
     pass

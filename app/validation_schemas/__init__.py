@@ -1,3 +1,0 @@
-from app.validation_schemas.learning_schema import CREATE_lEARNING_SCHEMA
-from app.validation_schemas.learning_schema import UPDATE_lEARNING_SCHEMA
-

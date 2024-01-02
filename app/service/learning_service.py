@@ -1,8 +1,23 @@
 from app.repository import LearningRepo
 from app.lib.custom_exceptions import DuplicateRecordException, CreateRecordFailed
 from flask import current_app as cdp_app
+from app.schema.learning_schema import CreateLearningRequest, CreateLearningResponse
+
 
 class LearningService:
+    @staticmethod
+    def create_learning(learning_data: CreateLearningRequest) -> CreateLearningResponse:
+        cdp_app.logger.info('Called Learning Service - create_learning')
+        try:
+            learning = LearningRepo.create_learning(learning_data)
+        except Exception as ex:
+            cdp_app.logger.error(f'DB Record creation failed | {ex}')
+            raise CreateRecordFailed
+
+        cdp_app.logger.info('Service call create_learning_record created successfully')
+
+        return learning
+
     @staticmethod
     def create_learning_record(learning_data):
         cdp_app.logger.info('Called Learning Service - create_learning_record')

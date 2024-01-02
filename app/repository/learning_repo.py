@@ -1,5 +1,6 @@
 from app.repository.sql_context import SqlContext
 from app.models import Learning
+from app.schema import CreateLearningRequest, CreateLearningResponse
 
 class LearningRepo:
     @staticmethod
@@ -11,6 +12,15 @@ class LearningRepo:
 
         return query.scalar() #returns one if exists else None
 
+    @staticmethod
+    def create_learning(learning_data: CreateLearningRequest) -> CreateLearningResponse:
+        learning = Learning()
+        learning.set_attributes(learning_data)
+
+        with SqlContext() as sql_context:
+            sql_context.session.add(learning)
+
+        return learning
 
     @staticmethod
     def create_learning_record(learning_data):
