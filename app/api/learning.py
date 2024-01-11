@@ -11,12 +11,16 @@ from app.tasks import send_new_learning_email
 from flask_dantic import pydantic_validator, serialize
 
 from app.schema import CreateLearningRequest, CreateLearningResponse
+from flasgger import swag_from
+from app.api.authorization import authorize_admin
 
 learning_bp = Blueprint('learning_bp', __name__)
 
 
 @learning_bp.route('/learning/create', methods=['POST'])
 @pydantic_validator(body=CreateLearningRequest)
+@authorize_admin
+@swag_from('app/api/api_docs/learning_apis/create_learning.yml')
 def create_learning():
     cdp_app.logger.info('API called - /learning/create')
     response = LearningService.create_learning(request.body_model)

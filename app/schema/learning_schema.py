@@ -2,7 +2,7 @@
 from typing import Optional
 from datetime import datetime
 from app.schema.base_schema import BaseSchema
-from pydantic import UUID4
+from pydantic import UUID4, validator
 
 
 class CreateLearningRequest(BaseSchema):

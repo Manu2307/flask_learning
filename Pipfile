@@ -24,10 +24,11 @@ redis = "*"
 celery = "*"
 requests = "*"
 passlib = "*"
-pyjwt = "*"
 flask-httpauth = "*"
 flask-dantic = "*"
-pydantic ="1.10.13"
+#pydantic = "1.10.13"
+pytest = "*"
+pyjwt = "==1.7.1"
 
 [dev-packages]
 
