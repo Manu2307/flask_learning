@@ -6,6 +6,7 @@ import json
 
 cdp_app = create_app(DevConfig)
 req_logger = logging.getLogger('RequestLogger')
+
 @cdp_app.before_request
 def cdp_app_before_request():
     log_params = {
@@ -16,10 +17,11 @@ def cdp_app_before_request():
     }
     if request.args:
         log_params['args'] = request.args
-    if request.json:
-        log_params['json'] = request.json
+    if request.is_json:
+        log_params['json'] = request.is_json
 
     req_logger.info(json.dumps(log_params))
+
 
 @cdp_app.route("/welcome", methods=["GET"])
 def welcome_method():

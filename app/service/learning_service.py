@@ -1,7 +1,11 @@
+from typing import List
+from uuid import uuid4
+
+from flask import current_app as cdp_app
+from app.models import Learning
 from app.repository import LearningRepo
 from app.lib.custom_exceptions import DuplicateRecordException, CreateRecordFailed
-from flask import current_app as cdp_app
-from app.schema.learning_schema import CreateLearningRequest, CreateLearningResponse
+from app.schema.learning_schema import CreateLearningRequest, CreateLearningResponse, EditLearningRequest
 
 
 class LearningService:
@@ -17,6 +21,44 @@ class LearningService:
         cdp_app.logger.info('Service call create_learning_record created successfully')
 
         return learning
+
+    @staticmethod
+    def get_all_learnings() -> List[Learning]:
+        cdp_app.logger.info('Called learning service - get_all_learnings')
+        try:
+            learnings = LearningRepo.get_all_learnings()
+        except Exception as ex:
+            error_msg = 'Unable to get learnings'
+            cdp_app.logger.error(f"{error_msg} - {ex}", exc_info=True)
+
+        return learnings
+
+    @staticmethod
+    def get_learning_by_id(learning_id) -> CreateLearningResponse:
+        cdp_app.logger.info('Called learning service - get_learning_by_id')
+        try:
+            learning = LearningRepo.get_learning_by_id(learning_id)
+        except Exception as ex:
+            error_msg = "Unexpected error occured"
+            cdp_app.logger.info(f'{error_msg} - {ex}', exc_info=True)
+
+        return learning
+
+    @staticmethod
+    def update_learning(learning_id: uuid4, learning_data: EditLearningRequest) -> CreateLearningResponse:
+        cdp_app.logger.info('Called Service - update_learning')
+        learning_record = LearningRepo.get_learning_by_id(learning_id)
+
+        if not learning_record:
+            cdp_app.logger.info(f"No record exists with Learning Id - {learning_id}")
+
+        try:
+            response = LearningRepo.update_learning(learning_record, learning_data)
+        except Exception as ex:
+            error_msg = f'Unable to update Learning record - {learning_record.id}'
+            cdp_app.logger.error(f'{error_msg} - {ex}', exc_info=True)
+
+        return response
 
     @staticmethod
     def create_learning_record(learning_data):

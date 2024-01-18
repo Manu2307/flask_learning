@@ -1,8 +1,34 @@
+from typing import List
+
 from app.repository.sql_context import SqlContext
 from app.models import Learning
-from app.schema import CreateLearningRequest, CreateLearningResponse
+from app.schema import CreateLearningRequest, CreateLearningResponse, EditLearningRequest
+
 
 class LearningRepo:
+    @staticmethod
+    def get_all_learnings() -> List[Learning]:
+        query = Learning.query.all()
+
+        return query
+
+    @staticmethod
+    def get_learning_by_id(learning_id) -> Learning:
+        query = Learning.query.filter(Learning.id == learning_id).one()
+
+        return query
+
+    @staticmethod
+    def update_learning(learning_record: Learning,
+                        learning_data: EditLearningRequest) -> CreateLearningResponse:
+        learning_record.set_attributes(learning_data)
+        with SqlContext() as sql_context:
+            sql_context.session.add(learning_record)
+
+        return learning_record
+
+
+
     @staticmethod
     def get_learning_record(associate_id, skill_name):
         query = Learning.query.filter(
