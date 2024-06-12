@@ -3,6 +3,7 @@ from flask import current_app
 
 mail = Mail()
 
+
 class Mailer:
     def __init__(self):
         self.email = mail

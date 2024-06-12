@@ -35,7 +35,7 @@ def authorize_admin(api_method):
         if 'SuperAdmin' not in g.jwt_payload.get('roles', []):
             return jsonify(
                 {
-                    'status': 'error', 'message': 'Access restricted because you are not an SuperAdmin'
+                    'status': 'error', 'message': 'Access restricted because you are not a SuperAdmin'
                 }
             ), HTTPStatus.FORBIDDEN
         return api_method(*args, **kwargs)

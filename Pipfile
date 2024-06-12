@@ -13,7 +13,7 @@ sqlalchemy-utils = "*"
 python-dotenv = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
-flasgger = "*"
+flasgger = "==0.9.4"
 pytz = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
@@ -29,6 +29,7 @@ flask-dantic = "*"
 #pydantic = "1.10.13"
 pytest = "*"
 pyjwt = "==1.7.1"
+pymongo = "*"
 
 [dev-packages]
 

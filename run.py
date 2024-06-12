@@ -7,6 +7,7 @@ import json
 cdp_app = create_app(DevConfig)
 req_logger = logging.getLogger('RequestLogger')
 
+
 @cdp_app.before_request
 def cdp_app_before_request():
     log_params = {

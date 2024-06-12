@@ -11,7 +11,7 @@ class CreateLearningRequest(BaseSchema):
     associate_id: str
     email: str
     skill_name: str
-    duration: int
+    duration: float
     learning_resource: str
     resource_link: str
     start_datetime: datetime
@@ -24,7 +24,7 @@ class CreateLearningResponse(BaseSchema):
     associate_id: UUID4
     email: str
     skill_name: str
-    duration: int
+    duration: float
     learning_resource: str
     resource_link: str
     start_datetime: datetime
@@ -40,7 +40,7 @@ class EditLearningRequest(BaseSchema):
     associate_id: Optional[str]
     email: Optional[str]
     skill_name: Optional[str]
-    duration: Optional[int]
+    duration: Optional[float]
     learning_resource: Optional[str]
     resource_link: Optional[str]
     start_datetime: Optional[datetime]

@@ -1,5 +1,6 @@
 from typing import List
 
+from sqlalchemy import delete
 from app.repository.sql_context import SqlContext
 from app.models import Learning
 from app.schema import CreateLearningRequest, CreateLearningResponse, EditLearningRequest
@@ -14,7 +15,7 @@ class LearningRepo:
 
     @staticmethod
     def get_learning_by_id(learning_id) -> Learning:
-        query = Learning.query.filter(Learning.id == learning_id).one()
+        query = Learning.query.filter(Learning.id == learning_id).one_or_none()
 
         return query
 
@@ -47,6 +48,13 @@ class LearningRepo:
             sql_context.session.add(learning)
 
         return learning
+
+    @staticmethod
+    def delete_learning(learning_record):
+        with SqlContext() as sql_context:
+            sql_context.session.delete(learning_record)
+        message = f"{learning_record.skill_name} - deleted successfully."
+        return message
 
     @staticmethod
     def create_learning_record(learning_data):

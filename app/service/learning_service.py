@@ -4,8 +4,10 @@ from uuid import uuid4
 from flask import current_app as cdp_app
 from app.models import Learning
 from app.repository import LearningRepo
-from app.lib.custom_exceptions import DuplicateRecordException, CreateRecordFailed
-from app.schema.learning_schema import CreateLearningRequest, CreateLearningResponse, EditLearningRequest
+from app.lib.custom_exceptions import (DuplicateRecordException, DBCreateRecordException,
+                                       DBRecordNotFoundException)
+from app.schema.learning_schema import (CreateLearningRequest, CreateLearningResponse,
+                                        EditLearningRequest)
 
 
 class LearningService:
@@ -16,7 +18,7 @@ class LearningService:
             learning = LearningRepo.create_learning(learning_data)
         except Exception as ex:
             cdp_app.logger.error(f'DB Record creation failed | {ex}')
-            raise CreateRecordFailed
+            raise DBCreateRecordException
 
         cdp_app.logger.info('Service call create_learning_record created successfully')
 
@@ -39,8 +41,15 @@ class LearningService:
         try:
             learning = LearningRepo.get_learning_by_id(learning_id)
         except Exception as ex:
-            error_msg = "Unexpected error occured"
-            cdp_app.logger.info(f'{error_msg} - {ex}', exc_info=True)
+            error_msg = "Unexpected error has occured"
+            cdp_app.logger.error(f'{error_msg} - {ex}', exc_info=True)
+
+        if not learning:
+            error_msg = (
+                f"No record exists with learning ID - {learning_id}"
+            )
+            cdp_app.logger.error(error_msg)
+            raise DBRecordNotFoundException(error_msg)
 
         return learning
 
@@ -50,7 +59,7 @@ class LearningService:
         learning_record = LearningRepo.get_learning_by_id(learning_id)
 
         if not learning_record:
-            cdp_app.logger.info(f"No record exists with Learning Id - {learning_id}")
+            cdp_app.logger.error(f"No record exists with Learning Id - {learning_id}")
 
         try:
             response = LearningRepo.update_learning(learning_record, learning_data)
@@ -59,6 +68,25 @@ class LearningService:
             cdp_app.logger.error(f'{error_msg} - {ex}', exc_info=True)
 
         return response
+
+    @staticmethod
+    def delete_learning(learning_id):
+        cdp_app.logger.info(f"Service called - delete_learning")
+        learning_record = LearningRepo.get_learning_by_id(learning_id)
+
+        if not learning_record:
+            error_msg = (
+                f"No record exists with Learning ID - {learning_id}"
+            )
+            cdp_app.logger.error(error_msg)
+            raise DBRecordNotFoundException(error_msg)
+
+        try:
+            message = LearningRepo.delete_learning(learning_record)
+        except Exception as ex:
+            error_msg = f"Unable to delete record - {learning_id}"
+            cdp_app.logger.error(f"{error_msg} - {str(ex)}", exc_info=True)
+        return message
 
     @staticmethod
     def create_learning_record(learning_data):
@@ -75,7 +103,7 @@ class LearningService:
             learning = LearningRepo.create_learning_record(learning_data)
         except Exception as ex:
             cdp_app.logger.error(f'DB Record creation failed | {ex}')
-            raise CreateRecordFailed
+            raise DBCreateRecordException("Unable to create record")
 
         cdp_app.logger.info('Service call create_learning_record created successfully')
 

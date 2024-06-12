@@ -3,7 +3,7 @@ from flask import request
 from http import HTTPStatus
 from uuid import uuid4
 from app.service import LearningService
-from app.lib.custom_exceptions import DuplicateRecordException, CreateRecordFailed
+# from app.lib.custom_exceptions import DuplicateRecordException, CreateRecordFailed
 from flask import current_app as cdp_app
 from app.schema import CREATE_lEARNING_SCHEMA, UPDATE_lEARNING_SCHEMA
 from app.lib.json_validator import validate_json_schema
@@ -12,7 +12,8 @@ from flask_dantic import pydantic_validator, serialize
 
 from app.schema import (CreateLearningRequest, CreateLearningResponse,
                         BaseLearningRequest, EditLearningRequest)
-from flasgger import swag_from
+from app.lib.error_handler import error_handler
+# from flasgger import swag_from
 from app.api.authorization import authorize_admin
 
 learning_bp = Blueprint('learning_bp', __name__)
@@ -21,7 +22,7 @@ learning_bp = Blueprint('learning_bp', __name__)
 @learning_bp.route('/learning/create', methods=['POST'])
 @pydantic_validator(body=CreateLearningRequest)
 # @authorize_admin
-@swag_from('app/api/api_docs/learning_apis/create_learning.yml')
+# @swag_from('app/api/api_docs/learning_apis/create_learning.yml')
 def create_learning():
     cdp_app.logger.info('API called - /learning/create')
     response = LearningService.create_learning(request.body_model)
@@ -41,6 +42,7 @@ def get_all_learnings():
 
 @learning_bp.route('/learning/get/<string:learning_id>', methods=['GET'])
 @pydantic_validator(path_params=BaseLearningRequest)
+@error_handler
 def get_learning_by_id(learning_id):
     cdp_app.logger.info(f'API called - /learning/get/{learning_id}')
     response = LearningService.get_learning_by_id(learning_id)
@@ -56,8 +58,17 @@ def update_learning(learning_id: uuid4):
     response = LearningService.update_learning(learning_id, request.body_model)
     data = serialize(response, CreateLearningResponse, json_dump=False)
 
-    return {'status': 'success', 'data': data}, HTTPStatus.OK
+    return {'status': 'success', 'data': data}, HTTPStatus.NOT_FOUND
 
+
+@learning_bp.route('/learning/delete/<string:learning_id>', methods=['DELETE'])
+@error_handler
+@pydantic_validator(path_params=BaseLearningRequest)
+def delete_learning(learning_id):
+    cdp_app.logger.info(f"API Called - /learning/delete/{learning_id}")
+    response = LearningService.delete_learning(learning_id)
+
+    return {'status': 'success', 'message': response}, HTTPStatus.ACCEPTED
 
 # @learning_bp.route('/learning/create', methods=['POST'])
 # @validate_json_schema(CREATE_lEARNING_SCHEMA)
