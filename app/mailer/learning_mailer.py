@@ -5,6 +5,7 @@ from flask_mail import Message
 
 logger = get_task_logger(__name__)
 
+
 class LearningMailer(Mailer):
     def send_new_learning_email(self, to_email, recipient_name, skill_name):
         logger.info(f'Received request to send_new_learning_email to {to_email}')

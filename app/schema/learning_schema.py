@@ -1,15 +1,17 @@
-# from pydantic import Field
+from pydantic import Field
 from typing import Optional
 from datetime import datetime
-from app.schema.base_schema import BaseSchema
 from pydantic import UUID4
+
+from app.lib.constants import UUID_REGEX
+from app.schema.base_schema import BaseSchema
 
 
 class CreateLearningRequest(BaseSchema):
     associate_id: str
     email: str
     skill_name: str
-    duration: int
+    duration: float
     learning_resource: str
     resource_link: str
     start_datetime: datetime
@@ -22,12 +24,28 @@ class CreateLearningResponse(BaseSchema):
     associate_id: UUID4
     email: str
     skill_name: str
-    duration: int
+    duration: float
     learning_resource: str
     resource_link: str
     start_datetime: datetime
     end_datetime: datetime
     status: str
+
+
+class BaseLearningRequest(BaseSchema):
+    learning_id: str = Field(..., regex=UUID_REGEX)
+
+
+class EditLearningRequest(BaseSchema):
+    associate_id: Optional[str]
+    email: Optional[str]
+    skill_name: Optional[str]
+    duration: Optional[float]
+    learning_resource: Optional[str]
+    resource_link: Optional[str]
+    start_datetime: Optional[datetime]
+    end_datetime: Optional[datetime]
+    status: Optional[str]
 
 
 CREATE_lEARNING_SCHEMA = {
